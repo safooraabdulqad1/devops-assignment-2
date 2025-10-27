@@ -1,104 +1,157 @@
-# 🧾 DevOps Tools Assignment-2  
-**Automated Workflow using Git, Docker, Jenkins & Kubernetes**
+# TableBook — Table Booking System
 
----
+![Python](https://img.shields.io/badge/Python-3.9-blue)
+![Flask](https://img.shields.io/badge/Flask-Latest-green)
+![Docker](https://img.shields.io/badge/Docker-Enabled-blue)
+![Jenkins](https://img.shields.io/badge/Jenkins-CI/CD-red?logo=jenkins&logoColor=white)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-Ready-326CE5)
+![CI/CD](https://img.shields.io/badge/Jenkins-Pipeline-red)
 
-## **1️⃣ Version Control and Branching (Git)**
-```bash
-git init
-git add .
-git commit -m "Initial commit"
+A production-ready Flask web application with complete CI/CD pipeline using Jenkins, Docker, and Kubernetes deployment.
 
-git branch develop
-git checkout develop
-git checkout -b feature/login
-# (make changes)
-git add .
-git commit -m "Added login feature"
-git checkout develop
-git merge feature/login
-git checkout main
-git merge develop
+## 🎯 Overview
 
-git remote add origin https://github.com/<username>/<repo-name>.git
-git push -u origin main
-git push origin develop
+This project demonstrates a complete DevOps workflow for a Flask web application, including:
+
+- Containerized application using Docker
+- Automated CI/CD pipeline with Jenkins
+- Kubernetes orchestration for production deployment
+- Automated testing and deployment stages
+
+## Screenshots
+
+Jenkins CI/CD
+![Jenkins CI/CD](screenshots/jenkins-ci-cd.png)
+
+Jenkins configuration
+![Jenkins configuration](screenshots/jenkins-config.png)
+
+Github Repository
+![Github Repository](screenshots/github.png)
+
+Kubernetes Services Running using minikube
+![Kubernetes Services](screenshots/kubernetes-service.png)
+
+Docker Image
+![Docker Image](screenshots/docker-hub.png)
+
+Website view
+![Website view](screenshots/website.png)
+
+## Urls
+- GitHub Repository: https://github.com/SasiVakulRithwik/devops-assignment-2
+- Docker Hub Image: https://hub.docker.com/r/sasivakulrithwik/devops-assignment-2
+
+## Quick links (workspace files & key symbols)
+- Files:
+  - [app.py](app.py)
+  - [templates/index.html](templates/index.html)
+  - [Dockerfile](Dockerfile)
+  - [k8s/deployment.yaml](k8s/deployment.yaml)
+  - [k8s/service.yaml](k8s/service.yaml)
+  - [Jenkinsfile](Jenkinsfile)
+  - [requirements.txt](requirements.txt)
+  - [.dockerignore](.dockerignore)
+  - [.gitignore](.gitignore)
+  - [kubectl-config.yaml](kubectl-config.yaml)
+  - [screenshots/](screenshots/)
+- Key symbols:
+  - Flask app instance: [`app`](app.py)
+  - Flask route handler: [`index`](app.py)
+  - Client-side functions: [`renderTables`](templates/index.html), [`confirmBooking`](templates/index.html)
+
+## File structure
 ```
-📸 *Screenshot: Git branching & commits*
+.
+├── .dockerignore
+├── .gitignore
+├── Dockerfile
+├── Jenkinsfile
+├── README.md
+├── app.py
+├── requirements.txt
+├── kubectl-config.yaml
+├── k8s/
+│   ├── deployment.yaml
+│   └── service.yaml
+├── templates/
+│   └── index.html
+└── screenshots/
+```
 
----
-
-## **2️⃣ Containerization (Docker)**
+## Run locally (development)
+1. Create a virtualenv and install deps:
 ```bash
-docker build -t ticket-booking-app:v1 .
-docker images
-docker run -d -p 3000:3000 ticket-booking-app:v1
+python -m venv .venv
+# Activate the venv (platform dependent)
+# Windows:
+.venv\Scripts\activate
+# macOS / Linux:
+source .venv/bin/activate
+
+pip install -r requirements.txt
+```
+
+2. Start the app (development server):
+```bash
+python app.py
+# App listens on http://0.0.0.0:8000 (open http://localhost:8000 in your browser)
+```
+
+3. Notes:
+- The Flask entrypoint is [`app`](app.py) and route [`index`](app.py) renders [`templates/index.html`](templates/index.html).
+- For production WSGI, use the same Gunicorn command used in the Dockerfile.
+
+## Docker — build & run
+Build the image (tag as you like):
+```bash
+docker build -t sasivakulrithwik/devops-assignment-2:latest .
+```
+
+Run the container (map port 8000):
+```bash
+docker run --rm -d -p 8001:8000 --name tablebook sasivakulrithwik/devops-assignment-2:latest
+# Verify:
 docker ps
-docker stop <container_id>
-docker login
-docker tag ticket-booking-app:v1 <dockerhub-username>/ticket-booking-app:v1
-docker push <dockerhub-username>/ticket-booking-app:v1
+docker logs tablebook
+# Open: http://localhost:8000
 ```
-📸 *Screenshot: Docker build & running container*
 
----
-
-## **3️⃣ CI/CD Pipeline (Jenkins)**
-```bash
-# Install Jenkins & plugins (Git, Docker, Pipeline)
-sudo systemctl start jenkins
-sudo systemctl enable jenkins
-
-# Access Jenkins at: http://localhost:8080
-# Create new pipeline project
-
-# Connect GitHub repo in Jenkins
-# Add DockerHub credentials in Jenkins → Manage Credentials
-
-# Build & deploy pipeline
+Gunicorn command used in the container (from Dockerfile):
+```text
+gunicorn --bind 0.0.0.0:8000 app:app
 ```
-📸 *Screenshot: Jenkins pipeline & success build*
 
----
-
-## **4️⃣ Deployment & Orchestration (Kubernetes)**
+## Kubernetes — deploy & inspect
+Apply manifests:
 ```bash
-kubectl version
-kubectl get nodes
+kubectl apply -f k8s/deployment.yaml
+kubectl apply -f k8s/service.yaml
+```
 
-kubectl apply -f k8s-deployment.yaml
-kubectl apply -f k8s-service.yaml
-kubectl get pods
+Check rollout & status:
+```bash
+kubectl rollout status deployment/devops-assignment-2 --timeout=180s
+kubectl get deployments -o wide
+kubectl get pods -o wide
 kubectl get svc
-
-kubectl scale deployment ticket-booking-deployment --replicas=5
-kubectl get pods
-kubectl describe svc ticket-booking-service
 ```
-📸 *Screenshot: Pods, Services & Scaling*
 
----
+## Helpful commands (summary)
+- Local run: `python app.py`
+- Docker build: `docker build -t devops-assignment-2  .`
+- Docker run: `docker run -p 8001:8000 devops-assignment-2 `
+- Kubernetes apply: `kubectl apply -f k8s/deployment.yaml && kubectl apply -f k8s/service.yaml`
+- Check pods/services: `kubectl get pods, minikube service devops-assignment-2 `
+- View logs: `kubectl logs pod/devops-assignment-2` or `docker logs devops-assignment-2-app`
 
-## **5️⃣ Final Steps**
-```bash
-git add .
-git commit -m "Final project setup with CI/CD and Kubernetes"
-git push origin main
-```
-📸 *Screenshot: GitHub repo with all files*
+## Author
+- GitHub: https://github.com/SasiVakulRithwik
+- Docker Hub: https://hub.docker.com/u/sasivakulrithwik
 
----
 
-## 📂 Folder Structure
-```
-/screenshots
-  ├── git.png
-  ├── docker.png
-  ├── jenkins.png
-  ├── k8s.png
-Dockerfile
-Jenkinsfile
-k8s-deployment.yaml
-k8s-service.yaml
-README.md
-```
+## Acknowledgments
+- Built with Flask and simple client-side JS.
+- Deployment examples inspired by Docker + Kubernetes patterns.
+
+> ⭐ If you find this project helpful, please give it a star!
