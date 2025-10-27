@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🎟️ Ticket Booking App</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #74b9ff, #a29bfe);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            width: 350px;
+            text-align: center;
+            transition: 0.3s;
+        }
+        .container:hover {
+            transform: scale(1.02);
+        }
+        h2 {
+            color: #2d3436;
+            margin-bottom: 20px;
+        }
+        input, select {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #b2bec3;
+            border-radius: 5px;
+            outline: none;
+            transition: 0.3s;
+        }
+        input:focus, select:focus {
+            border-color: #0984e3;
+        }
+        button {
+            width: 95%;
+            background: #0984e3;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 15px;
+        }
+        button:hover {
+            background: #74b9ff;
+        }
+        .error {
+            color: red;
+            font-size: 13px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🎫 Book Your Ticket</h2>
+        <form id="bookingForm" action="/book" method="POST">
+            <input type="text" name="name" id="name" placeholder="Your Name">
+            <div class="error" id="nameError">Please enter your name.</div>
+
+            <select name="event" id="event">
+                <option value="">Select Event</option>
+                <option value="Concert">Concert</option>
+                <option value="Movie">Movie</option>
+                <option value="Sports">Sports</option>
+            </select>
+            <div class="error" id="eventError">Please select an event.</div>
+
+            <select name="seatType" id="seatType">
+                <option value="">Select Seat Type</option>
+                <option value="Regular">Regular</option>
+                <option value="VIP">VIP</option>
+                <option value="Premium">Premium</option>
+            </select>
+            <div class="error" id="seatError">Please select a seat type.</div>
+
+            <input type="number" name="tickets" id="tickets" placeholder="Number of Tickets" min="1">
+            <div class="error" id="ticketError">Enter a valid number of tickets.</div>
+
+            <button type="submit">Book Now</button>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById('bookingForm');
+        form.addEventListener('submit', function(e) {
+            let valid = true;
+
+            const name = document.getElementById('name');
+            const event = document.getElementById('event');
+            const seat = document.getElementById('seatType');
+            const tickets = document.getElementById('tickets');
+
+            document.querySelectorAll('.error').forEach(el => el.style.display = 'none');
+
+            if (name.value.trim() === '') {
+                document.getElementById('nameError').style.display = 'block';
+                valid = false;
+            }
+            if (event.value === '') {
+                document.getElementById('eventError').style.display = 'block';
+                valid = false;
+            }
+            if (seat.value === '') {
+                document.getElementById('seatError').style.display = 'block';
+                valid = false;
+            }
+            if (tickets.value === '' || tickets.value <= 0) {
+                document.getElementById('ticketError').style.display = 'block';
+                valid = false;
+            }
+
+            if (!valid) e.preventDefault();
+        });
+    </script>
+</body>
+</html>
