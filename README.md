@@ -2,7 +2,6 @@
 
 ![Python](https://img.shields.io/badge/Python-3.9-blue)
 ![Flask](https://img.shields.io/badge/Flask-Latest-green)
-![Docker](https://img.shields.io/badge/Docker-Enabled-blue)
 ![Jenkins](https://img.shields.io/badge/Jenkins-CI/CD-red?logo=jenkins&logoColor=white)
 ![Kubernetes](https://img.shields.io/badge/Kubernetes-Ready-326CE5)
 ![CI/CD](https://img.shields.io/badge/Jenkins-Pipeline-red)
@@ -32,15 +31,9 @@ Github Repository
 Kubernetes Services Running using minikube
 ![Kubernetes Services](screenshots/kubernetes-service.png)
 
-Docker Image
-![Docker Image](screenshots/docker-hub.png)
-
 Website view
 ![Website view](screenshots/website.png)
 
-## Urls
-- GitHub Repository: https://github.com/SasiVakulRithwik/devops-assignment-2
-- Docker Hub Image: https://hub.docker.com/r/sasivakulrithwik/devops-assignment-2
 
 ## Quick links (workspace files & key symbols)
 - Files:
@@ -102,25 +95,6 @@ python app.py
 - The Flask entrypoint is [`app`](app.py) and route [`index`](app.py) renders [`templates/index.html`](templates/index.html).
 - For production WSGI, use the same Gunicorn command used in the Dockerfile.
 
-## Docker — build & run
-Build the image (tag as you like):
-```bash
-docker build -t sasivakulrithwik/devops-assignment-2:latest .
-```
-
-Run the container (map port 8000):
-```bash
-docker run --rm -d -p 8001:8000 --name tablebook sasivakulrithwik/devops-assignment-2:latest
-# Verify:
-docker ps
-docker logs tablebook
-# Open: http://localhost:8000
-```
-
-Gunicorn command used in the container (from Dockerfile):
-```text
-gunicorn --bind 0.0.0.0:8000 app:app
-```
 
 ## Kubernetes — deploy & inspect
 Apply manifests:
@@ -137,21 +111,4 @@ kubectl get pods -o wide
 kubectl get svc
 ```
 
-## Helpful commands (summary)
-- Local run: `python app.py`
-- Docker build: `docker build -t devops-assignment-2  .`
-- Docker run: `docker run -p 8001:8000 devops-assignment-2 `
-- Kubernetes apply: `kubectl apply -f k8s/deployment.yaml && kubectl apply -f k8s/service.yaml`
-- Check pods/services: `kubectl get pods, minikube service devops-assignment-2 `
-- View logs: `kubectl logs pod/devops-assignment-2` or `docker logs devops-assignment-2-app`
 
-## Author
-- GitHub: https://github.com/SasiVakulRithwik
-- Docker Hub: https://hub.docker.com/u/sasivakulrithwik
-
-
-## Acknowledgments
-- Built with Flask and simple client-side JS.
-- Deployment examples inspired by Docker + Kubernetes patterns.
-
-> ⭐ If you find this project helpful, please give it a star!
